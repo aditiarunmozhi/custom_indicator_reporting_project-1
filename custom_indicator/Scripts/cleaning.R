@@ -16,11 +16,6 @@ kp_disaggs_counts_clean <- kp_disaggs_counts %>%
                                  "NON-PEPFAR Supported Site" = "non-PEPFAR",
                                  "PEPFAR Supported Site" = "PEPFAR"))
 
-#merge with mech ref file
-mech_merge <- left_join(kp_disaggs_counts_clean, mech_id_ref_table_fy23, by = c("Country" ="country"))
-
-anti_merge <- anti_join(mech_merge, kp_disaggs_counts_clean, by = "Country")
-
 #Age and Sex cleaning
 age_sex_counts <- read.csv("Data/age_sex_counts_fy23_q1.csv")
   
