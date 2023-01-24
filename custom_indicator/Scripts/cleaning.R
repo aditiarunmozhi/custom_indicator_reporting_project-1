@@ -1,4 +1,5 @@
 snapshot_indicators <- c("TX_CURR_VERIFY", "TX_PVLS_VERIFY", "TX_PVLS_ELIGIBLE")
+site_type_indicators <- c("TX_NEW_VERIFY","TX_CURR_VERIFY","TX_PVLS_VERIFY")
 
 #KP disaggs cleaning
 kp_disaggs_counts <- read.csv("Data/kp_disaggs_counts_fy23_q1.csv")
@@ -17,11 +18,14 @@ kp_disaggs_counts_clean <- kp_disaggs_counts %>%
                                  "NON-PEPFAR Supported Site" = "non-PEPFAR",
                                  "PEPFAR Supported Site" = "PEPFAR"),
          filter = case_when(indicator %in% snapshot_indicators & Fiscal.Month.Number != 3 ~ "DEL",
-                            TRUE ~ "KEEP")) %>% filter(filter == "KEEP") %>%
-  select(-keypop, -Month.Name, -Fiscal.Month.Number, -filter) %>%
-  group_by(Country, SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, numdenom, population,
-           otherdisaggregate, reportingperiod) %>%
-  summarise_at(value = sum(value))
+                            TRUE ~ "KEEP"),
+         otherdisaggregate = case_when(indicator %in% site_type_indicators ~ as.character(otherdisaggregate))) %>%
+  filter(filter == "KEEP") %>%
+  select(-keypop, -Month.Name, -Fiscal.Month.Number, -filter)
+  
+  #group_by(Country, SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, numdenom, population,
+  #         otherdisaggregate, reportingperiod) %>%
+  #summarise_at(value = sum(value))
 
 #Age and Sex cleaning
 age_sex_counts <- read.csv("Data/age_sex_counts_fy23_q1.csv")
