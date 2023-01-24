@@ -13,9 +13,12 @@
 *.png
 *.twbx
 *.pptx
+*.Rproj
 
 #nothing from these folders
 AI/*
 GIS/*
 Images/*
 Graphics/*
+Data/*
+Dataout/*
