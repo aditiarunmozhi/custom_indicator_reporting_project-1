@@ -1,20 +1,27 @@
+snapshot_indicators <- c("TX_CURR_VERIFY", "TX_PVLS_VERIFY", "TX_PVLS_ELIGIBLE")
+
 #KP disaggs cleaning
 kp_disaggs_counts <- read.csv("Data/kp_disaggs_counts_fy23_q1.csv")
 
 table(kp_disaggs_counts$All.Target.Populations)
 
 kp_disaggs_counts_clean <- kp_disaggs_counts %>%
-  rename(indicator = Data.Element.Short.Name, population = All.Target.Populations, otherdisaggregate = PEPFAR) %>%
+  rename(indicator = Data.Element.Short.Name, population = All.Target.Populations, otherdisaggregate = PEPFAR, value = Value) %>%
+  unite(reportingperiod, c("Fiscal.Year.Short.Name","Fiscal.Quarter"), sep = " Q") %>%
   separate(indicator, c("indicator", "numdenom","keypop"), sep = "[ ]") %>%
-  mutate(numdenom = recode(numdenom,
-                           "(N)" = "Numerator",
-                           "(D)" = "Denominator"), #if not numerator then denominator, so no null values
+  mutate(numdenom = if_else(numdenom == "(D)", "Denominator", "Numerator"),
          population = recode(population,
                 "Female Sex Workers" = "FSW",
                 "Transgender People" = "TG"),
          otherdisaggregate = recode(otherdisaggregate,
                                  "NON-PEPFAR Supported Site" = "non-PEPFAR",
-                                 "PEPFAR Supported Site" = "PEPFAR"))
+                                 "PEPFAR Supported Site" = "PEPFAR"),
+         filter = case_when(indicator %in% snapshot_indicators & Fiscal.Month.Number != 3 ~ "DEL",
+                            TRUE ~ "KEEP")) %>% filter(filter == "KEEP") %>%
+  select(-keypop, -Month.Name, -Fiscal.Month.Number, -filter) %>%
+  group_by(Country, SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, numdenom, population,
+           otherdisaggregate, reportingperiod) %>%
+  summarise_at(value = sum(value))
 
 #Age and Sex cleaning
 age_sex_counts <- read.csv("Data/age_sex_counts_fy23_q1.csv")
