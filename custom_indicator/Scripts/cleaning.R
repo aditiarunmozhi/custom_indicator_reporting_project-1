@@ -27,6 +27,9 @@ kp_disaggs_counts_clean <- kp_disaggs_counts %>%
   #summarise_at(value = sum(value))
 
 #Age and Sex cleaning
+#PrEP indicators have <20 as a category in age so need to double check on why that is
+#ages mainly need a 0 in front of single digit numbers
+  
 age_sex_counts <- read.csv("Data/age_sex_counts_fy23_q1.csv")
 
 age_sex_counts_clean <- age_sex_counts %>%
