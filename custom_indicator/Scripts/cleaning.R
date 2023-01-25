@@ -32,9 +32,8 @@ age_sex_counts <- read.csv("Data/age_sex_counts_fy23_q1.csv")
 age_sex_counts_clean <- age_sex_counts %>%
   rename(indicator = Data.Element.Short.Name, otherdisaggregate = PEPFAR, value = Value) %>%
   unite(reportingperiod, c("Fiscal.Year.Short.Name","Fiscal.Quarter"), sep = " Q") %>%
-  separate(indicator, c("indicator", "numdenom","pop"), sep = "[ ]") #%>%
-  mutate(pop = if_else(str_detect(numdenom, "P"), "(KP)", as.character(keypop)), #change these to account for GP and PP
-         numdenom = if_else(numdenom == "(D)", "Denominator", "Numerator"), # no (N) pr (D) so crosscheck with CIRG long table for note down which is D and N
+  separate(indicator, c("indicator", "pop"), sep = "[ ]") %>%
+  mutate(pop = recode(pop, "keyPop" = "(KP)"),
          otherdisaggregate = recode(otherdisaggregate,
                                     "NON-PEPFAR Supported Site" = "non-PEPFAR",
                                     "PEPFAR Supported Site" = "PEPFAR"), 
@@ -47,3 +46,17 @@ age_sex_counts_clean <- age_sex_counts %>%
   
 age_sex_snapshot <- read.csv("Data/age_sex_snapshots_fy23_q1.csv")
   
+age_sex_snapshot_clean <- age_sex_snapshot %>%
+  rename(indicator = Data.Element.Short.Name, otherdisaggregate = PEPFAR, value = Value) %>%
+  unite(reportingperiod, c("Fiscal.Year.Short.Name","Fiscal.Quarter"), sep = " Q") %>%
+  separate(indicator, c("indicator", "numdenom","keypop"), sep = "[ ]") %>%
+  mutate(keypop = if_else(str_detect(numdenom, "P"), as.character(numdenom), as.character(keypop)),
+         numdenom = if_else(numdenom == "(D)", "Denominator", "Numerator"),
+         otherdisaggregate = recode(otherdisaggregate,
+                                    "NON-PEPFAR Supported Site" = "non-PEPFAR",
+                                    "PEPFAR Supported Site" = "PEPFAR"), 
+         filter = case_when(indicator %in% snapshot_indicators & Month.Name != "Dec" ~ "DEL",
+                            TRUE ~ "KEEP"),
+         otherdisaggregate = case_when(indicator %in% site_type_indicators ~ as.character(otherdisaggregate))) %>%
+  filter(filter == "KEEP") %>%
+  select(-Month.Name, -Month.Name, -filter)
