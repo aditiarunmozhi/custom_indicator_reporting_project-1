@@ -69,7 +69,9 @@ mech_id_ref_table_fy23 <- mech_id_ref_datim_fy23 %>%
 
 mech_id_ref_table_fy23 <- mech_id_ref_table_fy23 %>% 
   mutate(country = str_replace_all(country, fixed("Democratic Republic of the Congo"), "DRC")) %>%
-  filter(mech_code != 84522) %>% add_row(mech_code = "83017", partner = "Family Health International", ou = "Asia Region",
+  filter(mech_code != 84522) %>%
+  filter(!(str_detect(mech_name, "EAWA"))) %>%
+  add_row(mech_code = "83017", partner = "Family Health International", ou = "Asia Region",
                                          country = "Philippines", mech_name = "FHI 360 Epic")
   
 #note some countries may have more than 1 mechanism per country. To avoid duplicating when merging by country (to obtain the mech information)
