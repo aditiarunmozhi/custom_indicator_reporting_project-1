@@ -23,7 +23,9 @@ kp_disaggs_counts_clean <- kp_disaggs_counts %>%
                             TRUE ~ "KEEP"), # try changing this using subset function
          otherdisaggregate = case_when(indicator %in% site_type_indicators ~ as.character(otherdisaggregate))) %>%
   filter(filter == "KEEP") %>%
-  select(reportingperiod, Country, contains("SNU"), indicator, otherdisaggregate, population, numdenom, value)
+  select(reportingperiod, Country, contains("SNU"), indicator, otherdisaggregate, population, numdenom, value) %>%
+  group_by(reportingperiod, Country,  SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, otherdisaggregate, population, numdenom, value) %>%
+  summarise(value = sum(value))
   
   #group_by(Country, SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, numdenom, population,
   #         otherdisaggregate, reportingperiod) %>%
@@ -53,7 +55,9 @@ age_sex_counts_clean <- age_sex_counts %>%
                       "Age Unknown" = "Unknown Age"),
          age = if_else(indicator %in% indicators_less_than_20 & age %in% less_than_20, "<20", as.character(age))) %>%
   filter(filter == "KEEP") %>%
-  select(reportingperiod, Country, contains("SNU"), indicator, sex, age, otherdisaggregate, population, numdenom, value)
+  select(reportingperiod, Country, contains("SNU"), indicator, sex, age, otherdisaggregate, population, numdenom, value)%>%
+  group_by(reportingperiod, Country,  SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, sex, age, otherdisaggregate, population, numdenom, value) %>%
+  summarise(value = sum(value))
 
 age_sex_snapshot <- read.csv("Data/age_sex_snapshots_fy23_q1.csv")
   
@@ -77,6 +81,8 @@ age_sex_snapshot_clean <- age_sex_snapshot %>%
                       "Age Unknown" = "Unknown Age"),
          age = if_else(indicator %in% indicators_less_than_20 & age %in% less_than_20, "<20", as.character(age))) %>%
   filter(filter == "KEEP") %>%
-  select(reportingperiod, Country, contains("SNU"), indicator, sex, age, otherdisaggregate, population, numdenom, value)
+  select(reportingperiod, Country, contains("SNU"), indicator, sex, age, otherdisaggregate, population, numdenom, value)%>%
+  group_by(reportingperiod, Country,  SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, sex, age, otherdisaggregate, population, numdenom, value) %>%
+  summarise(value = sum(value))
 
   
