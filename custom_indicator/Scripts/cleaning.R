@@ -37,7 +37,8 @@ age_sex_counts_clean <- age_sex_counts %>%
   rename(indicator = Data.Element.Short.Name, otherdisaggregate = PEPFAR, value = Value, age = All.Age.Groups...For.DATIM.entry, sex = Sex) %>%
   unite(reportingperiod, c("Fiscal.Year.Short.Name","Fiscal.Quarter"), sep = " Q") %>%
   separate(indicator, c("indicator", "pop"), sep = "[ ]") %>%
-  mutate(pop = recode(pop, "(keyPop)" = "(KP)"),
+  mutate(numdenom = "Numerator",
+         pop = recode(pop, "(keyPop)" = "(KP)"),
          population = case_when(pop == "(GP)" ~ "Non-KP GP"),
          otherdisaggregate = recode(otherdisaggregate,
                                     "NON-PEPFAR Supported Site" = "non-PEPFAR",
@@ -76,6 +77,6 @@ age_sex_snapshot_clean <- age_sex_snapshot %>%
                       "Age Unknown" = "Unknown Age"),
          age = if_else(indicator %in% indicators_less_than_20 & age %in% less_than_20, "<20", as.character(age))) %>%
   filter(filter == "KEEP") %>%
-  select(-filter)
+  select(reportingperiod, Country, contains("SNU"), indicator, sex, age, otherdisaggregate, population, numdenom, value)
 
   
