@@ -8,5 +8,6 @@ country_kp <- mech_complete_clean_data %>% filter(population %in% keypop & indic
   group_by(reportingperiod, Country, indicator) %>% summarize(value = sum(value))
 
 #non-kp data
+
 country_age_sex <- mech_complete_clean_data %>% filter(Country == "Burkina Faso" & indicator == "TX_NEW_VERIFY") %>% 
   group_by(Country) %>% summarize(value = sum(value))
