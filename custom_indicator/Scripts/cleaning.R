@@ -74,4 +74,9 @@ age_sex_snapshot_clean <- age_sex_snapshot %>%
   group_by(reportingperiod, Country,  SNU.1, SNU.2, SNU.3, SNU.4, SNU.1.ID, SNU.2.ID, SNU.3.ID, SNU.4.ID, indicator, sex, age, otherdisaggregate, numdenom, value) %>%
   summarise(value = sum(value))
 
+#merge all three files
+complete_clean_data <- full_join(age_sex_counts_clean, age_sex_snapshot_clean) %>% 
+  bind_rows(kp_disaggs_counts_clean) %>%
+  relocate(population, .after = "otherdisaggregate")
+
   
