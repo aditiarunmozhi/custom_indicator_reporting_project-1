@@ -70,7 +70,7 @@ mech_id_ref_table_fy23 <- mech_id_ref_datim_fy23 %>%
 mech_id_ref_table_fy23 <- mech_id_ref_table_fy23 %>% 
   mutate(country = str_replace_all(country, fixed("Democratic Republic of the Congo"), "DRC")) %>%
   filter(mech_code != 84522) %>%
-  filter(!(str_detect(mech_name, "EAWA"))) %>% #Benin's only mechanism is EAWA
+  filter(!(str_detect(mech_name, "EAWA") & country %in% c("Burkina Faso", "Togo"))) %>% #Benin's only mechanism is EAWA, change this to only filter out for Togo and Burkina
   add_row(mech_code = "83017", partner = "Family Health International", ou = "Asia Region",
                                          country = "Philippines", mech_name = "FHI 360 Epic")
   
