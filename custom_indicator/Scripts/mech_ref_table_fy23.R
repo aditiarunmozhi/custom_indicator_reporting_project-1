@@ -79,10 +79,10 @@ mech_id_ref_table_fy23 <- mech_id_ref_table_fy23 %>%
 #which mechanisms are reporting for each country/geographic unit. Then filter out the mechanisms which exist but are note reporting the data. If you do not do this you will multiply the values 
 #by the number of merges by country and overreport. 
 
-#please filter below before exporting the final reference table
+#please filter below before using the final reference table
 
 # export -------------------------------------------------------------------
 
 
-write_csv(mech_id_ref_table_fy23, "./Dataout/mech_id_ref_table_fy23.csv")
+# write_csv(mech_id_ref_table_fy23, "./Dataout/mech_id_ref_table_fy23.csv")
 
