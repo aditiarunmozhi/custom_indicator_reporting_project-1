@@ -8,6 +8,8 @@ countries <- c(countries$country)
             
 org_url <- "https://www.datim.org/api/sqlViews/DataExchOUs/data?format=json"
 
+load_secrets()
+
 
 df_ous <- grabr::get_outable(
   username = glamr::datim_user(), 
@@ -33,7 +35,7 @@ df_orgs <- tibble::as_tibble(list_orgs$listGrid$rows, .name_repair = "unique") %
               .fn = ~str_replace(., "internal_id", "uid")) 
 
 
-tz_6_7 <- df_orgs %>% filter(orgunit_level %in% c(6, 7)) %>% print()
+tnz_6_7 <- df_orgs %>% filter(orgunit_level %in% c(6, 7)) %>% print()
 
 # ultimately bind rows so that we can merge by country, orgunit_pa --------
 
