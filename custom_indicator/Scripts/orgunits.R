@@ -3,6 +3,8 @@
 
 read_csv(file ="https://www.datim.org/api/sqlViews/DataExchOUs/data.csv?var=OU:TZA", datim_user(), datim_pwd())
 
+#ideally we'd run this after mech ref table merge and before data checking. First the 
+#issue with the data source must be solved for mech_ref...R
 tanz_info <- complete_clean_data %>% filter(Country=="Tanzania") %>% 
   select(SNU.1:SNU.4.ID, value) %>% group_by(across(c(-value))) %>% summarise(value = sum(value), .groups = "drop") %>% 
   clean_names() %>% 
