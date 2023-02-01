@@ -7,7 +7,7 @@
 tnz_info <- complete_clean_data %>% filter(country=="Tanzania") %>% 
   select(snu_1:snu_4_id, value) %>% group_by(across(c(-value))) %>% summarise(value = sum(value), .groups = "drop") %>% 
   clean_names() %>% 
-  print()
+  glimpse()
 
 # user purr to create DF for each country, named after each count --------
 # tnz_info <- complete_clean_data %>% filter(Country=="Tanzania") %>%
@@ -18,62 +18,102 @@ tnz_info <- complete_clean_data %>% filter(country=="Tanzania") %>%
 
 
 # get orgunit levels to match and join ------------------------------------
-tnz7op <- tnz_6_7 %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name)
-tnz7 <- c(tnz7op$orgunit_uid )
+tnz7op <- tnz_6_7 %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) %>% print()
+tnz7uid <- c(tnz7op$orgunit_uid)
 
 tnz6op <- tnz_6_7 %>% filter(orgunit_level  == "6") %>% select(orgunit_level:orgunit_name)
-tnz6 <- c(tnz6op$orgunit_uid)
+tnz6uid <- c(tnz6op$orgunit_uid)
 
+
+################################################################################
+################################################################################
+################################################################################
 
 
 # for most level 4 that match_level 7, use snu_4_id -----------------------
-tnz7<- tnz_info %>% filter(snu_4_id %in% tnz7, snu_4!="") %>% select(-snu_1_id:-snu_3_id) %>% rename(orgunit = snu_4, orgunituid = snu_4_id) %>% print()
+tnz7<- tnz_info %>% filter(snu_4_id %in% tnz7uid, snu_4!="") %>% select(-snu_1_id:-snu_3_id) %>% rename(orgunit = snu_4, orgunituid = snu_4_id)
 
 
 # for level 4 that doesn't match level 7, match by snu_4 recide sn --------
-tnz7m <- tnz_info %>% filter(!snu_4_id %in% tnz7, snu_4 != "") %>% rename(orgunit = snu_4)
-nrow(tnz7m)
+tnz7m1 <- tnz_info %>% filter(!snu_4_id %in% tnz7uid, snu_4 != "") %>% rename(orgunit_name = snu_4)
+nrow(tnz7m1)
 
-tnz7m <- tnz7m %>% left_join(tnz7n) %>% # or inner if there are non-matches
+#identify and resolve any failed matches
+tnz7m1 %>%
+  anti_join(tnz7op) 
+#resolve discrepanceies
+
+#now match
+tnz7m <- tnz7m1 %>% inner_join(tnz7op) %>% # or inner if there are non-matches 
   select(-snu_1_id:-snu_4_id) %>%
-  rename(orgunituid = uid) %>%
+  rename(orgunituid = orgunit_uid, orgunit = orgunit_name) %>%
   print() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
-  
-tnz7m %>% filter(is.na(orgunituid)) #check for unmatched
 
+
+#check for 1:many matches
+tnz7m %>% select(value, orgunit) %>% group_by_all() %>% 
+  filter(n()>1)
+
+#check for unmatched
+tnz7m %>% filter(is.na(orgunituid)) 
+
+
+##############################################################################
 
 # check for missing data at snu_level_3
-tnz6<- tnz_info %>% filter(snu_3 == "", snu_4 == "") %>% print()
+tnz6 <- tnz_info %>% filter(snu_3 == "", snu_4 == "") %>% print()
+
+##############################################################################
 
 
 # at snu_level_match to metadata level, tz 6 ------------------------------
-tnz6<- tnz_info %>% filter(snu_3_id %in% tnz6, snu_4 == "") %>% 
+tnz6<- tnz_info %>% filter(snu_3_id %in% tnz6uid, snu_4 == "") %>% 
   rename(orgunit = snu_3, orgunituid = snu_3_id) %>% 
-  select(-snu_1_id:-snu_2_id, -snu_4, -snu_4_id) %>%
-  print()
+  select(-snu_1_id:-snu_2_id, -snu_4, -snu_4_id) 
+nrow(tnz6)
 
 # for level 3 that doesn't match level 6, match by snu_3 to snu_3_id from metadata ----------
-tnz6m <- tnz_info %>% filter(!snu_3_id %in% tnz6, snu_4 == "") %>% print()
-nrow(tnz6m) 
+tnz6m1 <- tnz_info %>% filter(!snu_3_id %in% tnz6uid, snu_4 == "")
+nrow(tnz6m1) 
 
-tnz6m <- tnz6m %>%
-  rename(orgunit = snu_3, parent = snu_2) %>%
+#identify any failed matches, but do not save --> resolve in later stages
+tnz6m1 %>%
+  rename(orgunit_name = snu_3, orgunit_parent = snu_2) %>%
   #add in second join criteria for parent id to statement below
-  left_join(tz_6n) %>% # or inner if there are non-matches
+  anti_join(tnz6op, by = c("orgunit_name","orgunit_parent")) %>%
+  #resolve
+  mutate(orgunit_name = recode(orgunit_name, "Mbinga mjini" = "Mbinga Mjini")) %>%
+  print()
+
+tnz6op %>% filter(orgunit_parent == "Dodoma MC", orgunit_name == "Mpunguzi")
+#one orgunit has tow orgunit_uids, arbitrarily remove one below
+tnz6op <- tnz6op %>% filter(orgunit_uid != "gxidqz4F8pv")
+#check if resolved
+tnz6op %>% filter(orgunit_parent == "Dodoma MC", orgunit_name == "Mpunguzi")
+
+
+#run inner join
+tnz6m <- tnz6m1 %>%
+  rename(orgunit_name = snu_3, orgunit_parent = snu_2) %>%
+  #fix the issue noted above for TZ
+  mutate(orgunit_name = recode(orgunit_name, "Mbinga mjini" = "Mbinga Mjini")) %>%
+  #add in second join criteria for parent id to statement below
+  inner_join(tnz6op, by = c("orgunit_name","orgunit_parent"), na_matches = "never") %>% # or inner if there are non-matches
   select(-snu_1_id:-snu_4_id) %>%
-  rename(orgunituid = uid) %>%
+  rename(orgunit = orgunit_name) %>% 
   print() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
 
+#1 row double matched initially but no longer --> resolved above
+test <- tnz6m %>% select(value, orgunit_parent, orgunit) %>% group_by_all() %>% 
+  filter(n()>1)
+test
 
-#in the case of TZ, there are multiple SNU2s with the same name for snu3. We need to match based on two levels
-#to eliminate duplication, but currently our ref file only has 1 level at a time. I submitted a github issue 
-#for the grabr package to see if I can find a way to pull the datim metadata table with parent and child levels 
-#in same rows 
 
 
-  tnz6m %>% filter(is.na(orgunituid)) #check for unmatched
+tnz <- bind_rows(tnz7, tnz7m, tnz6, tnz6m) %>% select(-contains("snu"), -orgunit_level:-orgunit_uid) %>% 
+  filter(!is.na(orgunit)) %>% print() 
+#check to see if number of rows matches source
+nrow(tnz) - nrow(tnz_info)
 
-  
-tnz <- bind_rows(tnz7, tnz7m, tnz6, tnz6m) %>% select(-snu_3, -parent, -snu_4)
 
 #later bind country dfs together
