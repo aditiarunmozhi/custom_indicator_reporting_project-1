@@ -77,8 +77,9 @@ age_sex_snapshot_clean <- age_sex_snapshot %>% clean_names() %>%
 
 #merge all three files
 complete_clean_data <- dplyr::full_join(age_sex_counts_clean, age_sex_snapshot_clean) %>% 
+  #unclear why are you joining above?
   bind_rows(kp_disaggs_counts_clean) %>% glimpse()
   relocate(population, .after = "otherdisaggregate")
 
-  complete_clean_data
+
   
