@@ -77,13 +77,13 @@ tanz6<- tanz_info %>% filter(snu_3 == "", snu_4 == "") %>% print()
 
 
 # at snu_level_match to metadata level, tz 6 ------------------------------
-tanz6<- tanz_info %>% filter(snu_3_id %in% tz6, snu_4 == "") %>% 
+tanz6<- tanz_info %>% filter(snu_3_id %in% tz_6, snu_4 == "") %>% 
   rename(orgunit = snu_3, orgunituid = snu_3_id) %>% 
   select(-snu_1_id:-snu_2_id, -snu_4, -snu_4_id) %>%
   print()
 
 # for level 3 that doesn't match level 6, match by snu_3 to snu_3_id from metadata ----------
-tanz6m <- tanz_info %>% filter(!snu_3_id %in% tz6, snu_4 == "") %>% print()
+tanz6m <- tanz_info %>% filter(!snu_3_id %in% tz_6, snu_4 == "") %>% print()
 nrow(tanz6m) 
 
 tanz6m <- tanz6m %>%
