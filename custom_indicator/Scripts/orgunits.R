@@ -1,21 +1,19 @@
 
 # obtain metadata from infolink -------------------------------------------
 
-read_csv(file ="https://www.datim.org/api/sqlViews/DataExchOUs/data.csv?var=OU:TZA", datim_user(), datim_pwd())
 
 #ideally we'd run this after mech ref table merge and before data checking. First the 
 #issue with the data source must be solved for mech_ref...R
-tanz_info <- complete_clean_data %>% filter(Country=="Tanzania") %>% 
-  select(SNU.1:SNU.4.ID, value) %>% group_by(across(c(-value))) %>% summarise(value = sum(value), .groups = "drop") %>% 
+tanz_info <- complete_clean_data %>% filter(country=="Tanzania") %>% 
+  select(snu_1:snu_4_id, value) %>% group_by(across(c(-value))) %>% summarise(value = sum(value), .groups = "drop") %>% 
   clean_names() %>% 
   print()
 
-tanz_info
-# user purr to create DF for each country, named afeter each count --------
+# user purr to create DF for each country, named after each count --------
 # tanz_info <- complete_clean_data %>% filter(Country=="Tanzania") %>%
 #   clean_names()
 #currently commented out because we are merging at a simpler level for now as we test the process
-tanz_info
+
 
 # obtain DATIM metadata ---------------------------------------------------
 load_secrets()
@@ -28,14 +26,6 @@ tz <- grabr::get_ouuids(
   baseurl = "https://final.datim.org/"
 ) %>% filter(operatingunit == "Tanzania") %>% 
   select(uid) %>% as.list(uid)
-
-
-grabr::datim_dimensions(
-  url = "https://www.datim.org/api/sqlViews/DataExchOUs/data.csv?var=OU:TZA",
-  datim_user(),
-  datim_pwd(),
-  var = NULL
-)
 
 ouuid <- tz
 
