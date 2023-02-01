@@ -20,12 +20,11 @@ df_ous
 list_orgs <- df_ous %>% 
   filter(country %in% c("Tanzania")) %>% 
   pull(country_iso) %>% 
-  paste0(org_url, "&var=OU:", .) %>% 
+  paste0(org_url, "&var=OU:", ., "&paging=false") %>% 
   httr::GET(httr::authenticate(user = glamr::datim_user(), 
                                password = glamr::datim_pwd())) %>% 
   httr::content("text") %>% 
   jsonlite::fromJSON(flatten=TRUE) 
-#somewhere above the data source is being truncated to the first 50 rows
 
 
 df_orgs <- tibble::as_tibble(list_orgs$listGrid$rows, .name_repair = "unique") %>% 
@@ -35,12 +34,6 @@ df_orgs <- tibble::as_tibble(list_orgs$listGrid$rows, .name_repair = "unique") %
 
 
 tz_6_7 <- df_orgs %>% filter(orgunit_level %in% c(6, 7)) %>% print()
-
-##################
-##################
-#is there a way to get levels 6 and 7? are those simply beyond the DataExchOUs?
-##################
-##################
 
 # ultimately bind rows so that we can merge by country, orgunit_pa --------
 
