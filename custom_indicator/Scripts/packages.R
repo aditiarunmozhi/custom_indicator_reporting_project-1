@@ -5,4 +5,4 @@ library(filenamer)
 library(janitor)
 library(glamr)
 
-si_setup()
+# si_setup()
