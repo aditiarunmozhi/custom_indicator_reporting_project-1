@@ -32,7 +32,7 @@ mer_items <- grabr::pano_content(page_url = dir_mer_path, session = sess) %>%
 dest_path <- paste0(si_path(),"/Temp/")
 
 
-# pull latest psnuXim MSD ---------------------------------------------------------
+# pull latest pOUXim MSD ---------------------------------------------------------
 url_ou_im <- mer_items %>%
   filter(type == "file zip_file",
          str_detect(item, ".*_OU_IM_FY2.*.zip$")) %>%
@@ -41,5 +41,23 @@ url_ou_im <- mer_items %>%
 
 
 
-# quick fix to filepaths --------------------------------------------------
+# quick fix to filepaths --------------------------------------------------------
 grabr::pano_download(item_url = url_ou_im, session = sess)
+
+
+
+
+# read OUxIM MSD, filter and condense---------------------------------------------
+file <- glamr::return_latest("Data/", "OU_IM_FY20") %>% print()
+mer_df <- read_msd(file, save_rds = TRUE, remove_txt = FALSE)
+
+df <- mer_df %>%  filter(
+  str_detect(standardizeddisaggregate, "KeyPop|Total") == TRUE,
+  funding_agency == "USAID") %>% 
+  mutate(fy = fiscal_year,
+         partner = prime_partner_name) %>% 
+  filter(fy>=2022) %>%
+  select(operatingunit, country, prime_partner_name, mech_code, mech_name, award_number, fy) %>% 
+  group_by_all() %>% summarise(.groups = "drop") %>% glimpse()
+
+
