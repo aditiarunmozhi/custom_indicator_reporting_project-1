@@ -4,10 +4,17 @@
 
 #ideally we'd run this after mech ref table merge and before data checking. First the 
 #issue with the data source must be solved for mech_ref...R
+<<<<<<< HEAD
 # tnz_info <- complete_clean_data %>% filter(country=="Tanzania") %>% 
 #   select(snu_1:snu_4_id, value) %>% group_by(across(c(-value))) %>% summarise(value = sum(value), .groups = "drop") %>% 
 #   clean_names() %>% 
 #   glimpse()
+=======
+tnz_info <- complete_clean_data %>% filter(country=="Tanzania") %>% 
+  select(snu_1:snu_4_id, value) %>% group_by(across(c(-value))) %>% summarise(value = sum(value), .groups = "drop") %>% 
+  clean_names() %>% 
+  glimpse()
+>>>>>>> 12a9f37687c58bb81acc6b2ca87abcd188917451
 
 # user purr to create DF for each country, named after each count --------
 tnz_info <- complete_clean_data %>% filter(country=="Tanzania") %>%
@@ -23,11 +30,18 @@ tnz7uid <- c(tnz7op$orgunit_uid)
 
 tnz6op <- tnz_6_7 %>% filter(orgunit_level  == "6") %>% select(orgunit_level:orgunit_name)
 tnz6uid <- c(tnz6op$orgunit_uid)
+<<<<<<< HEAD
 
 
 
 ################################################################################
+=======
+>>>>>>> 12a9f37687c58bb81acc6b2ca87abcd188917451
 
+
+################################################################################
+################################################################################
+################################################################################
 
 
 # for most level 4 that match_level 7, use snu_4_id -----------------------
@@ -41,7 +55,11 @@ nrow(tnz7m1)
 #identify and resolve any failed matches
 tnz7m1 %>%
   anti_join(tnz7op) 
+<<<<<<< HEAD
 #resolve discrepancies
+=======
+#resolve discrepanceies
+>>>>>>> 12a9f37687c58bb81acc6b2ca87abcd188917451
 
 #now match
 tnz7m <- tnz7m1 %>% inner_join(tnz7op) %>% # or inner if there are non-matches 
@@ -51,7 +69,11 @@ tnz7m <- tnz7m1 %>% inner_join(tnz7op) %>% # or inner if there are non-matches
 
 
 #check for 1:many matches
+<<<<<<< HEAD
 tnz7m %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit) %>% group_by_all() %>% 
+=======
+tnz7m %>% select(value, orgunit) %>% group_by_all() %>% 
+>>>>>>> 12a9f37687c58bb81acc6b2ca87abcd188917451
   filter(n()>1)
 
 #check for unmatched
@@ -104,14 +126,22 @@ tnz6m <- tnz6m1 %>%
   print() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
 
 #1 row double matched initially but no longer --> resolved above
+<<<<<<< HEAD
 test <- tnz6m %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit, orgunit_parent) %>% group_by_all() %>% 
+=======
+test <- tnz6m %>% select(value, orgunit_parent, orgunit) %>% group_by_all() %>% 
+>>>>>>> 12a9f37687c58bb81acc6b2ca87abcd188917451
   filter(n()>1)
 test
 
 
 
 tnz <- bind_rows(tnz7, tnz7m, tnz6, tnz6m) %>% select(-contains("snu"), -orgunit_level:-orgunit_uid) %>% 
+<<<<<<< HEAD
   print() 
+=======
+  filter(!is.na(orgunit)) %>% print() 
+>>>>>>> 12a9f37687c58bb81acc6b2ca87abcd188917451
 #check to see if number of rows matches source
 nrow(tnz) - nrow(tnz_info)
 
