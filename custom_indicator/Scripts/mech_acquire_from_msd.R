@@ -51,13 +51,13 @@ grabr::pano_download(item_url = url_ou_im, session = sess)
 file <- glamr::return_latest("Data/", "OU_IM_FY20") %>% print()
 mer_df <- read_msd(file, save_rds = TRUE, remove_txt = FALSE)
 
-df <- mer_df %>%  filter(
+msd <- mer_df %>%  filter(
   str_detect(standardizeddisaggregate, "KeyPop|Total") == TRUE,
   funding_agency == "USAID") %>% 
   mutate(fy = fiscal_year,
          partner = prime_partner_name) %>% 
-  filter(fy>=2022) %>%
-  select(operatingunit, country, prime_partner_name, mech_code, mech_name, award_number, fy) %>% 
+  filter(fy>=max(fy)-1) %>%
+  select(operatingunit, country, partner, mech_code, mech_name, award_number, fy) %>% 
   group_by_all() %>% summarise(.groups = "drop") %>% glimpse()
 
 

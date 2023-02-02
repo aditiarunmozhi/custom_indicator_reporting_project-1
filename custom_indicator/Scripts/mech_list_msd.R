@@ -27,16 +27,15 @@ nocountry <- mech_id_ref_datim_fy23 %>%
   print(n=22)
 
 # to merge with list of mechanisms with no country, prepare list from the MSD --------------------------------
-country_from_msd <- check %>% 
-  filter(fy %in% c(2022,2023),
-         operatingunit %in% rp,
-         str_detect(partner, "^FHI|^Family\\sHealth\\sInt"),
-         funding_agency == "USAID") %>% 
+country_from_msd <- msd %>% 
+  filter(operatingunit %in% rp,
+         str_detect(partner, "^FHI|^Family\\sHealth\\sInt")) %>% 
   select(country, mech_code, fy) %>% 
-  group_by_all() %>% summarise() %>%
-  arrange(country, mech_code, fy) %>% print(n=22)
+  group_by_all() %>% summarise(.groups = "drop") %>%
+  arrange(country, mech_code, fy) %>% print()
 
-country_from_msd_2023 <- country_from_msd %>% filter(fy == 2023) %>% select(-fy)
+country_from_msd_2023 <- country_from_msd %>% filter(fy == max(fy)) %>% select(-fy) %>% group_by_all() %>% summarise(.groups="drop")
+#note some still show multiple IMs per country
 
 #generate 2 splits, matched (4bind) and unmatched
 rp_2023 <- nocountry %>% left_join(country_from_msd_2023, by = "mech_code")
