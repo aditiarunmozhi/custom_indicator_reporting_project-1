@@ -11,12 +11,6 @@
 
 # user purr to create DF for each country, named after each count --------
 npl_info <- complete_clean_data %>% filter(country=="Nepal") %>%
-  mutate(snu_4 = str_to_title(snu_4),
-         snu_3 = str_to_title(snu_3),
-         snu_2 = str_to_title(snu_2),
-         snu_4  = str_replace(snu_4, "  ", " "),
-         snu_3  = str_replace(snu_3, "  ", " "),
-         snu_2  = str_replace(snu_2, "  ", " ")) %>%
   clean_names() %>% print()
 
 table(npl_info$snu_3) #snu3 level should match to level 7 in datim

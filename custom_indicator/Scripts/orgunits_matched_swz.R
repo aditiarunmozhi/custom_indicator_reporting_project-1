@@ -11,12 +11,6 @@
 
 # user purr to create DF for each country, named after each count --------
 swz_info <- complete_clean_data %>% filter(country=="Eswatini") %>%
-  mutate(snu_4 = str_to_title(snu_4),
-         snu_3 = str_to_title(snu_3),
-         snu_2 = str_to_title(snu_2),
-         snu_4  = str_replace(snu_4, "  ", " "),
-         snu_3  = str_replace(snu_3, "  ", " "),
-         snu_2  = str_replace(snu_2, "  ", " ")) %>%
   clean_names() %>% print()
 
 table(swz_info$snu_2) #snu2 level should match to level 5 in datim

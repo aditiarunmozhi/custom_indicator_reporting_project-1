@@ -11,12 +11,6 @@
 
 # user purr to create DF for each country, named after each count --------
 zaf_info <- complete_clean_data %>% filter(country=="South Africa") %>%
-  mutate(snu_4 = str_to_title(snu_4),
-         snu_3 = str_to_title(snu_3),
-         snu_2 = str_to_title(snu_2),
-         snu_4  = str_replace(snu_4, "  ", " "),
-         snu_3  = str_replace(snu_3, "  ", " "),
-         snu_2  = str_replace(snu_2, "  ", " ")) %>%
   select(-snu_3:-snu_4, -snu_3_id:-snu_4_id) %>%
   group_by(across(-c(value))) %>% summarise(value = sum(value), .groups = "drop") %>% 
   mutate(
