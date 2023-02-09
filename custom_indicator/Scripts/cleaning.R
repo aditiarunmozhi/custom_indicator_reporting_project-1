@@ -24,8 +24,8 @@ kp_disaggs_counts_clean <- kp_disaggs_counts %>% clean_names %>%
          otherdisaggregate = case_when(indicator %in% site_type_indicators ~ as.character(otherdisaggregate))) %>%
   filter(filter == "KEEP") %>%
   select(reportingperiod, country, contains("snu"), indicator, otherdisaggregate, population, numdenom, value) %>%
-  group_by(reportingperiod, country, snu_1, snu_2, snu_3, snu_4, snu_1_id, snu_2_id, snu_3_id, snu_4_id, indicator, otherdisaggregate, population, numdenom, value) %>%
-  summarise(value = sum(value), .groups = "drop")
+  dplyr::group_by(reportingperiod, country, snu_1, snu_2, snu_3, snu_4, snu_1_id, snu_2_id, snu_3_id, snu_4_id, indicator, otherdisaggregate, population, numdenom) %>%
+  dplyr::summarise(value = sum(value), .groups = "drop")
 
 #Age and Sex cleaning
 
@@ -47,8 +47,8 @@ age_sex_counts_clean <- age_sex_counts %>% clean_names() %>%
                       "Age Unknown" = "Unknown Age"),
          age = if_else(indicator %in% indicators_less_than_20 & age %in% less_than_20, "<20", as.character(age))) %>%
   select(reportingperiod, country, contains("snu"), indicator, sex, age, otherdisaggregate, numdenom, value)%>%
-  group_by(reportingperiod, country,  snu_1, snu_2, snu_3, snu_4, snu_1_id, snu_2_id, snu_3_id, snu_4_id, indicator, sex, age, otherdisaggregate, numdenom, value) %>%
-  summarise(value = sum(value), .groups = "drop")
+  dplyr::group_by(reportingperiod, country,  snu_1, snu_2, snu_3, snu_4, snu_1_id, snu_2_id, snu_3_id, snu_4_id, indicator, sex, age, otherdisaggregate, numdenom) %>%
+  dplyr::summarise(value = sum(value), .groups = "drop")
 
 age_sex_snapshot <- read.csv("Data/age_sex_snapshots_fy23_q1.csv")
   
@@ -71,8 +71,8 @@ age_sex_snapshot_clean <- age_sex_snapshot %>% clean_names() %>%
          age = if_else(indicator %in% indicators_less_than_20 & age %in% less_than_20, "<20", as.character(age))) %>%
   filter(filter == "KEEP") %>%
   select(reportingperiod, country, contains("snu"), indicator, sex, age, otherdisaggregate, numdenom, value)%>%
-  group_by(reportingperiod, country,  snu_1, snu_2, snu_3, snu_4, snu_1_id, snu_2_id, snu_3_id, snu_4_id, indicator, sex, age, otherdisaggregate, numdenom, value) %>%
-  summarise(value = sum(value), .groups = "drop")
+  dplyr::group_by(reportingperiod, country,  snu_1, snu_2, snu_3, snu_4, snu_1_id, snu_2_id, snu_3_id, snu_4_id, indicator, sex, age, otherdisaggregate, numdenom) %>%
+  dplyr::summarise(value = sum(value), .groups = "drop")
 
 
 #merge all three files

@@ -1,12 +1,10 @@
 new repo branch to code orgunits for more countries
 
-In progress:
-
-
 Remaining:
 Botswana
 Burkina Faso
 Burma
+Eswatini
 Ghana
 Indonesia
 Liberia
@@ -16,7 +14,6 @@ Senegal
 Togo
 
 Completed:
-
 Eswatini
 Kazakhstan
 Kyrgyzstan
