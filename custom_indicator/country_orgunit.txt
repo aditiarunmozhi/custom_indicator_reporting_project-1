@@ -7,7 +7,7 @@ Remaining:
 Botswana
 Burkina Faso
 Burma
-Eswatini
+
 Ghana
 Indonesia
 Kazakhstan
@@ -23,6 +23,7 @@ Togo
 Completed:
 Nepal 
 Tanzania
+Eswatini
 
 Low priority
 Burundi
