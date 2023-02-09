@@ -76,8 +76,6 @@ age_sex_snapshot_clean <- age_sex_snapshot %>% clean_names() %>%
 
 
 #merge all three files
-complete_clean_data <- bind_rows(age_sex_counts_clean, age_sex_snapshot_clean, kp_disaggs_counts_clean) %>% 
+complete_clean_data_pre_mech <- bind_rows(age_sex_counts_clean, age_sex_snapshot_clean, kp_disaggs_counts_clean) %>% 
   relocate(population, .after = "otherdisaggregate")
 
-
-  
