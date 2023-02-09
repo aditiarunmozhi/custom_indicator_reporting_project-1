@@ -11,7 +11,11 @@
 
 # user purr to create DF for each country, named after each count --------
 tjk_info <- complete_clean_data %>% filter(country=="Tajikistan") %>%
-  clean_names() %>% print()
+  mutate(
+    snu_4 = str_to_title(snu_4),
+    snu_3 = str_to_title(snu_3),
+    snu_2 = str_to_title(snu_2),
+  )
 
 table(tjk_info$snu_3) #snu3 level should match to level 7 in datim
 
@@ -62,8 +66,8 @@ tjk7m %>% filter(is.na(orgunituid))
 
 
 
-tjk <- bind_rows(tjk7, tjk7m) %>% select(-contains("snu"), -orgunit_level) %>% 
-  print() 
+tjk <- bind_rows(tjk7, tjk7m) %>% select(-contains("snu")) %>% 
+  glimpse() 
 #check to see if number of rows matches source
 nrow(tjk) - nrow(tjk_info)
 

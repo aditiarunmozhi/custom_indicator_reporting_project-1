@@ -11,7 +11,7 @@
 
 # user purr to create DF for each country, named after each count --------
 swz_info <- complete_clean_data %>% filter(country=="Eswatini") %>%
-  clean_names() %>% print()
+  clean_names() %>% glimpse()
 
 table(swz_info$snu_2) #snu2 level should match to level 5 in datim
 table(swz6op$orgunit_parent)
@@ -26,7 +26,10 @@ swz5uid
 
 
 # for most level 2 that match_level 5, use snu_2_id -----------------------
-swz5<- swz_info %>% filter(snu_2_id %in% swz5uid, snu_2!="") %>% select(-snu_4_id, -snu_3_id) %>% rename(orgunit = snu_2, orgunituid = snu_2_id)
+swz5<- swz_info %>% filter(snu_2_id %in% swz5uid, snu_2!="") %>% 
+  select(-snu_4_id, -snu_3_id) %>% 
+  rename(orgunit_uid  = snu_2_id) %>% inner_join(swz5op) %>%  
+  rename(orgunituid = orgunit_uid, orgunit = orgunit_name) 
 scales::percent(nrow(swz5)/nrow(swz_info))
 nrow(swz5)
 
@@ -44,7 +47,7 @@ swz5m1 %>%
 swz5m <- swz5m1 %>% inner_join(swz5op) %>% # or inner if there are non-matches
   select(-snu_3_id:-snu_4_id) %>%
   rename(orgunituid = orgunit_uid, orgunit = orgunit_name) %>%
-  print() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
+  glimpse() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
 
 
 #check for 1:many matches
@@ -67,8 +70,7 @@ swz5m1 %>% filter(orgunit_name %in% swz5m_dups, indicator == "PrEP_OFFER") %>%
 swz5m %>% filter(is.na(orgunituid))
 
 
-swz <- bind_rows(swz5, swz5m) %>% select(-contains("snu"), -orgunit_level) %>% 
-  print() 
+swz <- bind_rows(swz5, swz5m) %>% select(-contains("snu"))
 #check to see if number of rows matches source
 nrow(swz) - nrow(swz_info)
 

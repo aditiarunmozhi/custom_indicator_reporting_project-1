@@ -11,7 +11,11 @@
 
 # user purr to create DF for each country, named after each count --------
 kgz_info <- complete_clean_data %>% filter(country=="Kyrgyzstan") %>%
-  print()
+  mutate(
+    snu_4 = str_to_title(snu_4),
+    snu_3 = str_to_title(snu_3),
+    snu_2 = str_to_title(snu_2),
+  )
 
 table(kgz_info$snu_3) #snu3 level should match to level 7 in datim
 
@@ -62,8 +66,7 @@ kgz7m %>% filter(is.na(orgunituid))
 
 
 
-kgz <- bind_rows(kgz7, kgz7m) %>% select(-contains("snu"), -orgunit_level) %>% 
-  print() 
+kgz <- bind_rows(kgz7, kgz7m) %>% select(-contains("snu")) 
 #check to see if number of rows matches source
 nrow(kgz) - nrow(kgz_info)
 

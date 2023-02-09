@@ -11,7 +11,11 @@
 
 # user purr to create DF for each country, named after each count --------
 kaz_info <- complete_clean_data %>% filter(country=="Kazakhstan") %>%
-  print()
+  mutate(
+    snu_4 = str_to_title(snu_4),
+    snu_3 = str_to_title(snu_3),
+    snu_2 = str_to_title(snu_2),
+  )
 
 table(kaz_info$snu_3) #snu3 level should match to level 7 in datim
 
@@ -47,7 +51,7 @@ kaz71 <- kaz7m1 %>%
 kaz7m <- kaz7m1 %>% inner_join(kaz7op) %>% # or inner if there are non-matches 
   select(-snu_1_id:-snu_3_id) %>%
   rename(orgunituid = orgunit_uid, orgunit = orgunit_name) %>%
-  print() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
+  glimpse() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
 
 
 #check for 1:many matches
@@ -62,7 +66,7 @@ kaz7m %>% filter(is.na(orgunituid))
 
 
 
-kaz <- bind_rows(kaz7, kaz7m) %>% select(-contains("snu"), -orgunit_level) %>% 
+kaz <- bind_rows(kaz7, kaz7m) %>% select(-contains("snu")) %>% 
   print() 
 #check to see if number of rows matches source
 nrow(kaz) - nrow(kaz_info)

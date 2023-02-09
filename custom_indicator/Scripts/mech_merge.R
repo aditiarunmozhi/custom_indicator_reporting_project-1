@@ -6,9 +6,10 @@ complete_clean_data_pre_mech %>%  select(country) %>% group_by_all() %>% summari
 #overwrite df after merge
 complete_clean_data <- left_join(complete_clean_data_pre_mech, mech_id_ref_table_fy23, by = "country") %>% 
   relocate(mech_code:mech_name, .after = "reportingperiod") %>%   
-  mutate(snu_4 = str_to_title(snu_4),
-         snu_3 = str_to_title(snu_3),
-         snu_2 = str_to_title(snu_2),
+  mutate(
+         # snu_4 = str_to_title(snu_4),
+         # snu_3 = str_to_title(snu_3),
+         # snu_2 = str_to_title(snu_2),
          snu_4  = str_replace(snu_4, "  ", " "),
          snu_3  = str_replace(snu_3, "  ", " "),
          snu_2  = str_replace(snu_2, "  ", " ")) %>%

@@ -15,7 +15,6 @@ npl_info <- complete_clean_data %>% filter(country=="Nepal") %>%
 
 table(npl_info$snu_3) #snu3 level should match to level 7 in datim
 
-
 # get orgunit levels to match and join ------------------------------------
 npl7op <- npl_6_7 %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) %>% print()
 npl7uid <- c(npl7op$orgunit_uid)
@@ -30,7 +29,9 @@ npl6uid
 
 
 # for most level 3 that match_level 7, use snu_3_id -----------------------
-npl7<- npl_info %>% filter(snu_3_id %in% npl7uid, snu_3!="") %>% select(-snu_1_id:-snu_2_id) %>% rename(orgunit = snu_3, orgunituid = snu_3_id) 
+npl7<- npl_info %>% filter(snu_3_id %in% npl7uid, snu_3!="") %>% select(-snu_1_id:-snu_2_id) %>% 
+  rename(orgunit_uid = snu_3_id) %>% inner_join(npl7op) %>%  
+  rename(orgunituid = orgunit_uid, orgunit = orgunit_name)
 scales::percent(nrow(npl7)/nrow(npl_info))
 
 # for level 3 that doesn't match level 7, match by snu_3 id --------
@@ -50,7 +51,7 @@ npl7op %>% filter(str_detect(orgunit_name, "Bpkihs"))
 npl7m <- npl7m1 %>% inner_join(npl7op) %>% # or inner if there are non-matches 
   select(-snu_1_id:-snu_3_id) %>%
   rename(orgunituid = orgunit_uid, orgunit = orgunit_name) %>%
-  print() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
+  glimpse() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
 
 
 #check for 1:many matches
@@ -71,9 +72,9 @@ npl_info %>% filter(snu_2 == "") %>% print()
 
 
 # at snu_level_match to metadata level, npl 6 ------------------------------
-npl6 <- npl61 %>% filter(snu_2_id %in% npl6uid) %>% print()
+npl6 <- npl61 %>% filter(snu_2_id %in% npl6uid) %>% 
   rename(orgunit = snu_2, orgunituid = snu_2_id) %>% 
-  select(-snu_1_id:-snu_2_id, -snu_3, -snu_3_id) 
+  select(-snu_1_id,-snu_3_id) 
 nrow(npl6)
 
 # for level 3 that doesn't match level 6, match by snu_2 to snu_2_id from metadata ----------
@@ -108,8 +109,8 @@ npl6m <- npl6m1 %>% select(-orgunit_name) %>%
   # inner_join(npl6op, by = c("orgunit_name","orgunit_parent"), na_matches = "never") %>% # or inner if there are non-matches
   inner_join(npl6op) %>%
   select(-snu_1_id:-snu_3_id) %>%
-  rename(orgunit = orgunit_name) %>% 
-  print() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
+  rename(orgunit = orgunit_name, orgunituid = orgunit_uid) %>% 
+  glimpse() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
 
 #1 row double matched initially but no longer --> resolved above
 test <- npl6m %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit, orgunit_parent) %>% group_by_all() %>% 
@@ -118,8 +119,8 @@ test
 
 
 
-npl <- bind_rows(npl7, npl7m, npl6, npl6m) %>% select(-contains("snu"), -orgunit_level:-orgunit_uid) %>% 
-  print() 
+npl <- bind_rows(npl7, npl7m, npl6m) %>% select(-contains("snu")) %>% 
+  glimpse() 
 #check to see if number of rows matches source
 nrow(npl) - nrow(npl_info)
 
