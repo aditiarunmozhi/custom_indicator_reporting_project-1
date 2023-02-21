@@ -13,7 +13,12 @@ level_7 <- lao_orgs_clean %>% filter(orgunit_level == 7) %>%
   select(-orgunit_level)
 
 lao_orgunit_table <- full_join(level_5, level_6, by = join_by(orgunit_5_uid, orgunit_5), multiple = "all") %>%
-  full_join(level_7, by = join_by(orgunit_6_uid, orgunit_6), multiple = "all")
+  full_join(level_7, by = join_by(orgunit_6_uid, orgunit_6), multiple = "all") %>% select(sort(colnames(.))) %>%
+  select(orgunit_5, orgunit_5_uid, orgunit_6, orgunit_6_uid)
 
 #merge with data
+lao_clean <- lao %>% rename(orgunit_6 = orgunit_parent, orgunit_6_uid = orgunit_parent_uid)
 
+lao_merge_psnu <- left_join(lao_clean, lao_orgunit_table, by = join_by(orgunit_6_uid, orgunit_6), multiple = "all") %>% 
+  select(-c(contains("orgunit_6"))) %>% distinct() %>%
+  rename(psnu = orgunit_5, psnu_uid = orgunit_5_uid)
