@@ -1,4 +1,3 @@
-
 #transform and create table
 lao_orgs_clean <- lao_orgs %>% select(-c(regionorcountry_code, regionorcountry_name, moh_id, orgunit_code))
 
