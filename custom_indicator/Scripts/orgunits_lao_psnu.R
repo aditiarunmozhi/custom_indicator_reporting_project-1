@@ -23,3 +23,8 @@ lao_merge_psnu <- left_join(lao_clean, lao_orgunit_table, by = join_by(orgunit_6
   rename(psnu = orgunit_5, psnu_uid = orgunit_5_uid)
 
 #data validation with infolink
+lao_data_check <- lao_merge_psnu %>% group_by(psnu, psnu_uid, indicator, age, sex, population) %>% summarize(value = sum(value))
+
+#duplication again
+#could be because of multiple entries, check if there are duplicates in 14-16 or 21, maybe do the check at level 7 first
+#maybe add some other variables in infolink
