@@ -21,3 +21,5 @@ lao_clean <- lao %>% rename(orgunit_6 = orgunit_parent, orgunit_6_uid = orgunit_
 lao_merge_psnu <- left_join(lao_clean, lao_orgunit_table, by = join_by(orgunit_6_uid, orgunit_6), multiple = "all") %>% 
   select(-c(contains("orgunit_6"))) %>% distinct() %>%
   rename(psnu = orgunit_5, psnu_uid = orgunit_5_uid)
+
+#data validation with infolink
