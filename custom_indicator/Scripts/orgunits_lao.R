@@ -14,7 +14,7 @@ load_secrets()
 df_ous <- grabr::get_outable(
   username = glamr::datim_user(), 
   password = glamr::datim_pwd(),
-  baseurl = "https://www.datim.org/"
+  baseurl = "https://www.final.datim.org/"
 )
 df_ous
 
