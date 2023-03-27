@@ -3,8 +3,7 @@ countries <- c(unique(complete_clean_data$country)) %>% print()
 
 orgunit_levels <- grabr::get_levels(
   username = datim_user(),
-  password = datim_pwd(),
-  baseurl = "https://www.final.datim.org/") %>% 
+  password = datim_pwd()) %>% 
   mutate(countryname = recode(countryname, "Democratic Republic of the Congo" = "DRC")) %>%
   filter(countryname %in% countries) %>% 
   arrange(operatingunit, countryname) %>% print(n=23)

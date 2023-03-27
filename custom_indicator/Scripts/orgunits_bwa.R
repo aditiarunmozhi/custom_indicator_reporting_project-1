@@ -19,20 +19,9 @@ df_ous
 
 #USE PURR TO ITERATE AND PULL LIST FOR ALL COUNTRIES
 
-list_orgs <- df_ous %>% 
-  filter(country %in% c("Botswana")) %>% 
-  pull(country_iso) %>% 
-  paste0(org_url, "&var=OU:", ., "&paging=false") %>% 
-  httr::GET(httr::authenticate(user = glamr::datim_user(), 
-                               password = glamr::datim_pwd())) %>% 
-  httr::content("text") %>% 
-  jsonlite::fromJSON(flatten=TRUE) 
 
-
-df_orgs <- tibble::as_tibble(list_orgs$listGrid$rows, .name_repair = "unique") %>% 
-  setNames(list_orgs$listGrid$headers$name) %>% 
-  rename_with(.cols = contains("internal_id"),
-              .fn = ~str_replace(., "internal_id", "uid")) 
+list_orgs <- list_orgs_func("Botswana")
+df_orgs <- df_orgs_func()
 
 max(df_orgs$orgunit_level)
 unique(df_orgs$regionorcountry_code)
