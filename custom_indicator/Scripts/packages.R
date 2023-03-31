@@ -7,5 +7,6 @@ library(lubridate)
 library(strex)
 library(keyring)
 library(gagglr)
+library(purrr)
 # si_setup()
 

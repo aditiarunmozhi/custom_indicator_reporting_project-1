@@ -13,11 +13,6 @@ orgunit_table_join <- function(level_x, level_y, orgunit_x_uid, orgunit_x) {
     select(sort(colnames(.)))}
 
 #org unit list function
-country_list <- function() {
-  countries <- complete_clean_data %>% group_by(country) %>% summarise(.groups = "drop")
-  countries <- c(countries$country)
-}
-
 orgs_func <- function(ou) {
   org_url <- "https://www.datim.org/api/sqlViews/DataExchOUs/data?format=json"
   load_secrets()

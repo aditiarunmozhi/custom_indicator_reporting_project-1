@@ -1,6 +1,9 @@
 
 # obtain list of countries from cleaned infolink data ---------------------
-countries <- country_list()
+countries <- complete_clean_data %>% group_by(country) %>% 
+  mutate(country = recode(country, "DRC" = "Democratic Republic of the Congo")) %>%
+  summarise(.groups = "drop")
+countries <- c(countries$country)
 
 # get ou tableD from DATIM -------------------------------------------------
 
@@ -14,3 +17,5 @@ lao_6_7 <- orgunit_level_list(c(6,7))
 # ultimately bind rows so that we can merge by country, orgunit_pa --------
 
 # write_csv(df_orgs, "Data/laos_orgunits.csv")
+
+
