@@ -5,6 +5,8 @@ countries <- complete_clean_data %>% group_by(country) %>%
   summarise(.groups = "drop")
 countries <- c(countries$country)
 
-df_orgs <- map_df(countries, orgs_func)
+# get ou tableD from DATIM -------------------------------------------------
 
-lao_orgs <- df_orgs %>% filter(regionorcountry_name == "Laos")
+#USE PURR TO ITERATE AND PULL LIST FOR ALL COUNTRIES
+df_orgs <- map(countries, orgs_func)
+df_orgs <- df_orgs %>% set_names(., nm = map(df_orgs, ~glue("{tolower({first({.x$regionorcountry_code})})}_orgs")))

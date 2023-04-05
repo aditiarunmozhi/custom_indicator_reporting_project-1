@@ -1,31 +1,8 @@
 
-# obtain list of countries from cleaned infolink data ---------------------
-countries <- complete_clean_data %>% group_by(country) %>% summarise(.groups = "drop")
-countries <- c(countries$country)
+max(df_orgs$bwa_orgs$orgunit_level)
+unique(df_orgs$bwa_orgs$regionorcountry_code)
 
-
-# get ou tableD from DATIM -------------------------------------------------
-
-org_url <- "https://www.datim.org/api/sqlViews/DataExchOUs/data?format=json"
-
-load_secrets()
-
-
-df_ous <- grabr::get_outable(
-  username = glamr::datim_user(), 
-  password = glamr::datim_pwd()
-)
-df_ous
-
-#USE PURR TO ITERATE AND PULL LIST FOR ALL COUNTRIES
-
-
-list_orgs <- list_orgs_func("Botswana")
-df_orgs <- df_orgs_func()
-
-max(df_orgs$orgunit_level)
-unique(df_orgs$regionorcountry_code)
-bwa_5_6 <- df_orgs %>% filter(orgunit_level %in% c(5, 6)) %>% print()
+bwa_5_6 <- orgunit_level_list(df_orgs$bwa_orgs, c(5,6))
 
 # ultimately bind rows so that we can merge by country, orgunit_pa --------
 

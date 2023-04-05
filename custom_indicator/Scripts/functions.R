@@ -13,13 +13,13 @@ orgunit_table_join <- function(level_x, level_y, orgunit_x_uid, orgunit_x) {
     select(sort(colnames(.)))}
 
 #org unit list function
+org_url <- "https://www.datim.org/api/sqlViews/DataExchOUs/data?format=json"
+load_secrets()
+df_ous <- grabr::get_outable(
+  username = glamr::datim_user(), 
+  password = glamr::datim_pwd())
+
 orgs_func <- function(ou) {
-  org_url <- "https://www.datim.org/api/sqlViews/DataExchOUs/data?format=json"
-  load_secrets()
-  
-  df_ous <- grabr::get_outable(
-    username = glamr::datim_user(), 
-    password = glamr::datim_pwd())
   list_orgs <- df_ous %>% 
     filter(country %in% c(ou)) %>% 
     pull(country_iso) %>% 
@@ -31,10 +31,10 @@ orgs_func <- function(ou) {
   
   df_orgs <- tibble::as_tibble(list_orgs$listGrid$rows, .name_repair = "unique") %>% 
     setNames(list_orgs$listGrid$headers$name) %>% 
-    rename_with(.cols = contains("internal_id"),
+    rename_with(.colsa = contains("internal_id"),
                 .fn = ~str_replace(., "internal_id", "uid"))
 }
 
-orgunit_level_list <- function(levels) {
-  df_orgs %>% filter(orgunit_level %in% levels)
+orgunit_level_list <- function(df, levels) {
+  df %>% filter(orgunit_level %in% levels)
 }
