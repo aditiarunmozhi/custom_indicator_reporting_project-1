@@ -21,10 +21,20 @@ table(kgz_info$snu_3) #snu3 level should match to level 7 in datim
 
 
 # get orgunit levels to match and join ------------------------------------
-kgz7op <- kgz_7_8 %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
+kgz7op <- df_orgs$kgz_orgs %>% 
+  mutate(orgunit_parent  = str_to_title(orgunit_parent),
+         orgunit_parent  = str_replace(orgunit_parent, "\\s\\s", "\\s"), 
+         orgunit_name  = str_to_title(orgunit_name),
+         orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>%
+  filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
 kgz7uid <- c(kgz7op$orgunit_uid)
 
-kgz8op <- kgz_7_8 %>% filter(orgunit_level  == "8") %>% select(orgunit_level:orgunit_name)
+kgz8op <- df_orgs$kgz_orgs %>% 
+  mutate(orgunit_parent  = str_to_title(orgunit_parent),
+         orgunit_parent  = str_replace(orgunit_parent, "\\s\\s", "\\s"), 
+         orgunit_name  = str_to_title(orgunit_name),
+         orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>%
+  filter(orgunit_level  == "8") %>% select(orgunit_level:orgunit_name)
 kgz8uid <- c(kgz8op$orgunit_uid)
 
 

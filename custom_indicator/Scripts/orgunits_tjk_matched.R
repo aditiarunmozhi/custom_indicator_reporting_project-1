@@ -21,10 +21,20 @@ table(tjk_info$snu_3) #snu3 level should match to level 7 in datim
 
 
 # get orgunit levels to match and join ------------------------------------
-tjk7op <- tjk_6_7 %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
+tjk7op <- df_orgs$tjk_orgs %>% 
+  mutate(orgunit_parent  = str_to_title(orgunit_parent),
+         orgunit_parent  = str_replace(orgunit_parent, "\\s\\s", "\\s"), 
+         orgunit_name  = str_to_title(orgunit_name),
+         orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>%
+  filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
 tjk7uid <- c(tjk7op$orgunit_uid)
 
-tjk6op <- tjk_6_7 %>% filter(orgunit_level  == "6") %>% select(orgunit_level:orgunit_name)
+tjk6op <- df_orgs$tjk_orgs %>% 
+  mutate(orgunit_parent  = str_to_title(orgunit_parent),
+         orgunit_parent  = str_replace(orgunit_parent, "\\s\\s", "\\s"), 
+         orgunit_name  = str_to_title(orgunit_name),
+         orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>% 
+  filter(orgunit_level  == "6") %>% select(orgunit_level:orgunit_name)
 tjk6uid <- c(tjk6op$orgunit_uid)
 
 

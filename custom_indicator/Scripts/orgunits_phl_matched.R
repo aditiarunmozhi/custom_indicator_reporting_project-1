@@ -18,10 +18,10 @@ phl_info <- complete_clean_data %>% filter(country=="Philippines") %>%
   clean_names() %>% print()
 
 unique(phl_info$snu_4) #snu4 level should match to level 8 in datim
-unique(phl_8$orgunit_name)
+#unique(phl_8$orgunit_name)
 
 # get orgunit levels to match and join ------------------------------------
-phl8op <- phl_8 %>% select(orgunit_level:orgunit_name) %>% print()
+phl8op <- df_orgs$phl_orgs %>% filter(orgunit_level == 8) %>% select(orgunit_level:orgunit_name) %>% print()
 phl8uid <- c(phl8op$orgunit_uid)
 
 

@@ -14,10 +14,15 @@ swz_info <- complete_clean_data %>% filter(country=="Eswatini") %>%
   clean_names() %>% glimpse()
 
 table(swz_info$snu_2) #snu2 level should match to level 5 in datim
-table(swz6op$orgunit_parent)
+#table(swz6op$orgunit_parent)
 
 # get orgunit levels to match and join ------------------------------------
-swz5op <- swz_5_6 %>% filter(orgunit_level  == "5") %>% select(orgunit_level:orgunit_name)
+swz5op <- df_orgs$swz_orgs %>%
+  mutate(orgunit_parent  = str_to_title(orgunit_parent),
+         orgunit_parent  = str_replace(orgunit_parent, "\\s\\s", "\\s"), 
+         orgunit_name  = str_to_title(orgunit_name),
+         orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>%
+  filter(orgunit_level  == "5") %>% select(orgunit_level:orgunit_name)
 swz5uid <- c(swz5op$orgunit_uid)
 swz5uid
 

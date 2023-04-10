@@ -22,16 +22,16 @@ table(mmr_info$snu_4) #snu4 level should match to level 7 in datim
 
 
 # get orgunit levels to match and join ------------------------------------
-mmr7op <- mmr_7_8 %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
+mmr7op <- df_orgs$mmr_orgs %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
 mmr7uid <- c(mmr7op$orgunit_uid)
 
-mmr8op <- mmr_7_8 %>% filter(orgunit_level  == "8") %>% select(orgunit_level:orgunit_name)
+mmr8op <- df_orgs$mmr_orgs %>% filter(orgunit_level  == "8") %>% select(orgunit_level:orgunit_name)
 mmr8uid <- c(mmr8op$orgunit_uid)
 mmr8op
 
 ################################################################################
 unique(mmr_info$snu_4)
-unique(mmr_7_8$orgunit_name)
+unique(df_orgs$mmr_orgs$orgunit_name)
 
 
 # for most level 4 that match_level 7, use snu_4 id-----------------------

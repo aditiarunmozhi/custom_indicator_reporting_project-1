@@ -20,11 +20,11 @@ snu1 <- c(unique(civ_info$snu_1)) %>% print()
 
 # get orgunit levels to match and join ------------------------------------
 
-civ7op <- civ_6_7 %>% filter(orgunit_level  == "7") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
+civ7op <- df_orgs$civ_orgs %>% filter(orgunit_level  == "7") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
 civ7uid <- c(civ7op$orgunit_uid)
 unique(civ7op$orgunit_name)
 
-civ6op <- civ_6_7 %>% filter(orgunit_level  == "6") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
+civ6op <- df_orgs$civ_orgs%>% filter(orgunit_level  == "6") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
 civ6uid <- c(civ6op$orgunit_uid)
 unique(civ6op$orgunit_name)
 

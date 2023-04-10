@@ -21,10 +21,18 @@ table(kaz_info$snu_3) #snu3 level should match to level 7 in datim
 
 
 # get orgunit levels to match and join ------------------------------------
-kaz7op <- kaz_7_8 %>% filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
+kaz7op <- df_orgs$kaz_orgs %>% mutate(orgunit_parent  = str_to_title(orgunit_parent),
+                                      orgunit_parent  = str_replace(orgunit_parent, "\\s\\s", "\\s"), 
+                                      orgunit_name  = str_to_title(orgunit_name),
+                                      orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>%
+  filter(orgunit_level  == "7") %>% select(orgunit_level:orgunit_name) 
 kaz7uid <- c(kaz7op$orgunit_uid)
 
-kaz8op <- kaz_7_8 %>% filter(orgunit_level  == "8") %>% select(orgunit_level:orgunit_name)
+kaz8op <- df_orgs$kaz_orgs %>% mutate(orgunit_parent  = str_to_title(orgunit_parent),
+                                      orgunit_parent  = str_replace(orgunit_parent, "\\s\\s", "\\s"), 
+                                      orgunit_name  = str_to_title(orgunit_name),
+                                      orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>%
+  filter(orgunit_level  == "8") %>% select(orgunit_level:orgunit_name)
 kaz8uid <- c(kaz8op$orgunit_uid)
 
 

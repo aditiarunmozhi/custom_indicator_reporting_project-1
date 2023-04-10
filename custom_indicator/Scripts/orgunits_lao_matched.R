@@ -12,11 +12,11 @@
 # user purr to create DF for each country, named after each count --------
 
 # get orgunit levels to match and join ------------------------------------
-lao7op <- lao_6_7 %>% filter(orgunit_level == 7) %>% select(orgunit_level:orgunit_name) %>% arrange(orgunit_name)
+lao7op <- df_orgs$lao_orgs %>% filter(orgunit_level == 7) %>% select(orgunit_level:orgunit_name) %>% arrange(orgunit_name)
 lao7uid <- c(lao7op$orgunit_uid)
 lao7name <- unique(c(lao7op$orgunit_name))
 
-lao6op <- lao_6_7 %>% filter(orgunit_level == 6) %>% select(orgunit_level:orgunit_name) %>% arrange(orgunit_name)
+lao6op <- df_orgs$lao_orgs %>% filter(orgunit_level == 6) %>% select(orgunit_level:orgunit_name) %>% arrange(orgunit_name)
 lao6uid <- c(lao6op$orgunit_uid)
 lao6name <- unique(c(lao6op$orgunit_name))
 ################################################################################

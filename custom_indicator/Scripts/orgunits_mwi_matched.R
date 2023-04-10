@@ -18,15 +18,15 @@ snu1 <- c(unique(mwi_info$snu_1)) %>% print()
 
 # get orgunit levels to match and join ------------------------------------
 
-mwi7op <- mwi_5_7 %>% filter(orgunit_level  == "7") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
+mwi7op <- df_orgs$mwi_orgs %>% filter(orgunit_level  == "7") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
 mwi7uid <- c(mwi7op$orgunit_uid)
 mwi7name <- unique(c(mwi7op$orgunit_name)) %>% print()
 
-mwi6op <- mwi_5_7 %>% filter(orgunit_level  == "6") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
+mwi6op <- df_orgs$mwi_orgs %>% filter(orgunit_level  == "6") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
 mwi6uid <- c(mwi6op$orgunit_uid)
 mwi6name <- unique(c(mwi6op$orgunit_name)) %>% print()
 
-mwi5op <- mwi_5_7 %>% filter(orgunit_level  == "5") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
+mwi5op <- df_orgs$mwi_orgs %>% filter(orgunit_level  == "5") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
 mwi5uid <- c(mwi5op$orgunit_uid)
 mwi5name <- unique(c(mwi5op$orgunit_name)) %>% print()
 

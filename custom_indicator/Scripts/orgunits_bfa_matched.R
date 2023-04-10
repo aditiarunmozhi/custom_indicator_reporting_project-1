@@ -15,17 +15,18 @@ snu1 <- unique(bfa_info$snu_1) %>% print()
 snu2 <- c(unique(bfa_info$snu_2)) %>% print()
 
 # get orgunit levels to match and join ------------------------------------
-bfa6op <- bfa_5_6 %>% filter(orgunit_level  == "6") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name)
+bfa6op <- df_orgs$bfa_orgs %>% filter(orgunit_level  == "6") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name)
 bfa6uid <- c(bfa6op$orgunit_uid)
 unique(bfa6op$orgunit_name)
 
-bfa5op <- bfa_5_6 %>% filter(orgunit_level  == "5") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
+bfa5op <- df_orgs$bfa_orgs %>% filter(orgunit_level  == "5") %>% arrange(orgunit_name) %>% select(orgunit_level:orgunit_name) 
 bfa5uid <- c(bfa5op$orgunit_uid)
 unique(bfa5op$orgunit_name)
 
 
-bfa_5_6 %>% filter(orgunit_name %in% snu2) #snu2 should match datim level 6
-bfa_5_6 %>% filter(orgunit_name %in% snu1) #snu2 should match datim level 5
+
+df_orgs$bfa_orgs %>% filter(orgunit_name %in% snu2) #snu2 should match datim level 6
+df_orgs$bfa_orgs %>% filter(orgunit_name %in% snu1) #snu2 should match datim level 5
 
 
 ################################################################################
