@@ -1,5 +1,5 @@
 #transform and create table
-lao_orgs_clean <- orgunit_clean(df_orgs)
+lao_orgs_clean <- orgunit_clean(df_orgs$lao_orgs)
 
 lao_level_5 <- orgunit_level_sep(lao_orgs_clean , 5, orgunit_4, orgunit_4_uid, orgunit_5, orgunit_5_uid)
 
