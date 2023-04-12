@@ -2,17 +2,13 @@
 table(gha$orgunit_level)
 
 #transform and create table
-gha_orgs_clean <- gha_7_8 %>% select(-c(regionorcountry_code, regionorcountry_name, moh_id, orgunit_code))
+gha_orgs_clean <- orgunit_clean(df_orgs$gha_orgs)
 
-gha_level_7 <- gha_orgs_clean %>% filter(orgunit_level == 7) %>%
-  rename(orgunit_6 = orgunit_parent, orgunit_6_uid = orgunit_parent_uid, orgunit_7_uid = orgunit_uid, orgunit_7 = orgunit_name) %>%
-  select(-orgunit_level)
-gha_level_8 <- gha_orgs_clean %>% filter(orgunit_level == 8) %>%
-  rename(orgunit_7 = orgunit_parent, orgunit_7_uid = orgunit_parent_uid, orgunit_8_uid = orgunit_uid, orgunit_8 = orgunit_name) %>%
-  select(-orgunit_level)
+gha_level_7 <- orgunit_level_sep(gha_orgs_clean , 7, orgunit_6, orgunit_6_uid, orgunit_7, orgunit_7_uid)
 
-gha_orgunit_table <- full_join(gha_level_7, gha_level_8, by = join_by(orgunit_7_uid, orgunit_7), multiple = "all") %>%
-  select(sort(colnames(.)))
+gha_level_8 <- orgunit_level_sep(gha_orgs_clean , 8, orgunit_7, orgunit_7_uid, orgunit_8, orgunit_8_uid)
+
+gha_orgunit_table <- orgunit_table_join(gha_level_7, gha_level_8, orgunit_7_uid, orgunit_7)
 
 #merge with data
 gha_clean <- gha %>% rename(orgunit_7 = orgunit_parent, orgunit_7_uid = orgunit_parent_uid)
