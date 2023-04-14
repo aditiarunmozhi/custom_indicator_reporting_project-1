@@ -38,3 +38,8 @@ orgs_func <- function(ou) {
 orgunit_level_list <- function(df, levels) {
   df %>% filter(orgunit_level %in% levels)
 }
+
+#data validation
+data_check <- function(merge_psnu) {
+  merge_psnu %>% group_by(psnu, psnu_uid, indicator, age, sex, population) %>% summarize(value = sum(value))
+}

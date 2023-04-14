@@ -9,3 +9,6 @@ bfa_level_6 <- orgunit_level_sep(bfa_orgs_clean , 6, orgunit_5, orgunit_5_uid, o
 bfa_orgunit_table <- orgunit_table_join(bfa_level_5, bfa_level_6, orgunit_5_uid, orgunit_5)
 
 bfa_merge_psnu <- bfa %>% rename(psnu = orgunit_parent, psnu_uid = orgunit_parent_uid)
+
+#data validation
+bfa_data_check <- data_check(bfa_merge_psnu)
