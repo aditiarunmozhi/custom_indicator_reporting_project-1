@@ -14,3 +14,6 @@ bfa_orgunit_table <- full_join(bfa_level_5, bfa_level_6, by = join_by(orgunit_5_
   select(orgunit_5, orgunit_5_uid, orgunit_6, orgunit_6_uid)
 
 bfa_merge_psnu <- bfa %>% rename(psnu = orgunit_parent, psnu_uid = orgunit_parent_uid)
+
+bfa_data_check <- bfa_merge_psnu %>% group_by(reportingperiod, psnu, psnu_uid, indicator, age, sex) %>% summarize(value = sum(value))
+
