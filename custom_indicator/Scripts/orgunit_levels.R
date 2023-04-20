@@ -9,4 +9,5 @@ orgunit_levels <- grabr::get_levels(
   arrange(operatingunit, countryname) %>% print(n=23)
 
 # write_csv(orgunit_levels, "Data/orgunit_levels_by_ou.csv")
-orgunit_levels <- read.csv("Data/orgunit_levels_by_ou.csv")
+# orgunit_levels <- read.csv("Data/orgunit_levels_by_ou.csv")
+
