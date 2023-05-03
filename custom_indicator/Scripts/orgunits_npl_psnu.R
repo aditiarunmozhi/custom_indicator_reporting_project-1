@@ -1,4 +1,4 @@
-#psnu level 6
+#psnu level 5 CHANGED FROM LEVEL 6: NEEDS FIXING
 table(npl$orgunit_level)
 
 npl_7_clean <- npl %>% filter(orgunit_level == 7) %>% rename(psnu = orgunit_parent, psnu_uid = orgunit_parent_uid)
