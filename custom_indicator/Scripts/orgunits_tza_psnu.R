@@ -20,7 +20,7 @@ tza_6_clean <- tza %>% filter(orgunit_level == 6) %>% rename(orgunit_5 = orgunit
 tza_7_merge <- left_join(tza_7_clean, tza_orgunit_table, by = join_by(orgunit_6_uid, orgunit_6), multiple = "all") %>% 
   select(-c(contains("orgunit_6"), contains("orgunit_5"), contains("orgunit_3"))) %>% distinct() %>%
   rename(psnu = orgunit_4, psnu_uid = orgunit_4_uid)
-tza_6_merge <- left_join(tza_6_clean, tza_orgunit_table, by = join_by(orgunit_5_uid, orgunit_5), multiple = "all") %>% 
+tza_6_merge <- left_join(tza_6_clean, tza_orgunit_table, by = join_by(orgunit_5_uid, orgunit_5), multiple = "all", relationship = "many-to-many") %>% 
   select(-c(contains("orgunit_6"), contains("orgunit_5"), contains("orgunit_3"))) %>% distinct() %>%
   rename(psnu = orgunit_4, psnu_uid = orgunit_4_uid)
 

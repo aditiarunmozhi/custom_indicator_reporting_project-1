@@ -21,7 +21,7 @@ mmr_7_clean <- mmr %>% filter(orgunit_level == 7) %>% rename(orgunit_6 = orgunit
 mmr_8_merge <- left_join(mmr_8_clean, mmr_orgunit_table, by = join_by(orgunit_7_uid, orgunit_7), multiple = "all") %>% 
   select(-c(contains("orgunit_7"), contains("orgunit_6"), contains("orgunit_4"))) %>% distinct() %>%
   rename(psnu = orgunit_5, psnu_uid = orgunit_5_uid)
-mmr_7_merge <- left_join(mmr_7_clean, mmr_orgunit_table, by = join_by(orgunit_6_uid, orgunit_6), multiple = "all") %>% 
+mmr_7_merge <- left_join(mmr_7_clean, mmr_orgunit_table, by = join_by(orgunit_6_uid, orgunit_6), multiple = "all", relationship = "many-to-many") %>% 
   select(-c(contains("orgunit_7"), contains("orgunit_6"), contains("orgunit_4"))) %>% distinct() %>%
   rename(psnu = orgunit_5, psnu_uid = orgunit_5_uid)
 
