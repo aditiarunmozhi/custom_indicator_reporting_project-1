@@ -3,7 +3,7 @@
 
 org_url <- "https://www.datim.org/api/sqlViews/DataExchOUs/data?format=json"
 
-load_secrets()
+glamr::load_secrets()
 
 
 df_ous <- grabr::get_outable(
