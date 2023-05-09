@@ -1,4 +1,6 @@
 #psnu level 5
+table(kaz$orgunit_level)
+
 #transform and create table
 kaz_orgs_clean <- orgunit_clean(df_orgs$kaz_orgs)
 

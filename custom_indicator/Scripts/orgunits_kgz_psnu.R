@@ -1,4 +1,6 @@
 #psnu level 5
+table(kgz$orgunit_level)
+
 #transform and create table
 kgz_orgs_clean <- orgunit_clean(df_orgs$kgz_orgs)
 

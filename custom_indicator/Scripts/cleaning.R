@@ -6,7 +6,7 @@ less_than_20 <- c("<01","01-04","05-09","10-14","15-19")
 keypop <- c("FSW","MSM","PWID","TG","Prison")
 
 #KP disaggs cleaning
-kp_disaggs_counts <- read.csv("Data/kp_disaggs_counts_fy23_q1.csv")
+kp_disaggs_counts <- read.csv("Data/kp_disaggs_counts_fy23_q2.csv")
 
 kp_disaggs_counts_clean <- kp_disaggs_counts %>% clean_names %>% 
   dplyr::rename(indicator = data_element_short_name, population = all_target_populations, otherdisaggregate = pepfar) %>% 
@@ -29,7 +29,7 @@ kp_disaggs_counts_clean <- kp_disaggs_counts %>% clean_names %>%
 
 #Age and Sex cleaning
 
-age_sex_counts <- read.csv("Data/age_sex_counts_fy23_q1.csv")
+age_sex_counts <- read.csv("Data/age_sex_counts_fy23_q2.csv")
 
 age_sex_counts_clean <- age_sex_counts %>% clean_names() %>%
   dplyr::rename(indicator = data_element_short_name, otherdisaggregate = pepfar, age = all_age_groups_for_datim_entry) %>%
@@ -50,8 +50,10 @@ age_sex_counts_clean <- age_sex_counts %>% clean_names() %>%
   dplyr::group_by(reportingperiod, country,  snu_1, snu_2, snu_3, snu_4, snu_1_id, snu_2_id, snu_3_id, snu_4_id, indicator, sex, age, otherdisaggregate, numdenom) %>%
   dplyr::summarise(value = sum(value), .groups = "drop")
 
-age_sex_snapshot <- read.csv("Data/age_sex_snapshots_fy23_q1.csv")
-  
+age_sex_snapshot1 <- read.csv("Data/age_sex_snapshots1_fy23_q2.csv")
+age_sex_snapshot2 <- read.csv("Data/age_sex_snapshots2_fy23_q2.csv")
+age_sex_snapshot <- bind_rows(age_sex_snapshot1, age_sex_snapshot2)
+
 age_sex_snapshot_clean <- age_sex_snapshot %>% clean_names() %>%
   dplyr::rename(indicator = data_element_short_name, otherdisaggregate = pepfar, age = all_age_groups_for_datim_entry) %>%
   unite(reportingperiod, c("fiscal_year_short_name","fiscal_quarter"), sep = " Q") %>%

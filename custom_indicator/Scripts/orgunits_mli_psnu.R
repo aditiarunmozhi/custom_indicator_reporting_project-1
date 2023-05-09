@@ -1,4 +1,6 @@
 #psnu level 5
+table(mli$orgunit_level)
+
 #transform and create table
 mli_orgs_clean <- orgunit_clean(df_orgs$mli_orgs)
 

@@ -1,4 +1,6 @@
 #psnu level 5
+table(tjk$orgunit_level)
+
 #transform and create table
 tjk_orgs_clean <- orgunit_clean(df_orgs$tjk_orgs)
 

@@ -1,7 +1,7 @@
 #df orgs using purr package
 # obtain list of countries from cleaned infolink data ---------------------
 countries <- complete_clean_data %>% group_by(country) %>% 
-  mutate(country = recode(country, "DRC" = "Democratic Republic of the Congo")) %>%
+  mutate(country = recode(country, "Cote dIvoire" = "Cote d'Ivoire", "DRC" = "Democratic Republic of the Congo")) %>%
   summarise(.groups = "drop")
 countries <- c(countries$country)
 

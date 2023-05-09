@@ -4,7 +4,8 @@
 
 
 # user purr to create DF for each country, named after each count --------
-civ_info <- complete_clean_data %>% filter(country=="Cote d'Ivoire") %>%
+civ_info <- complete_clean_data %>% mutate(country = recode(country, "Cote dIvoire" = "Cote d'Ivoire")) %>%
+  filter(country=="Cote d'Ivoire") %>%
   mutate(snu_4 = recode(snu_4,
                         "CEEDeB Guiglo" = "Centre d’Eveil et d’Encadrement pour le Developpement a la Base de Guiglo (CEEDeB)",
                         "CEEDeB Duekoue" = "Centre d’Eveil et d’Encadrement pour le Developpement a la Base de Duekoue (CEEDeB)",
