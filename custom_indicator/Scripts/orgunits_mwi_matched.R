@@ -1,13 +1,8 @@
-
-# obtain metadata from infolink -------------------------------------------
-
-
-
 # user purr to create DF for each country, named after each count --------
 mwi_info <- complete_clean_data %>% filter(country=="Malawi") %>%
-  mutate(snu_3 = str_c(snu_3, "District", sep = " ")
+  # mutate(snu_3 = str_c(snu_3, "District", sep = " ")
     # snu_3 = str_to_title(snu_3),
-  ) %>%
+  # ) %>%
 glimpse()
 
 # snu4 <- c(unique(mwi_info$snu_4)) %>% print()
@@ -47,8 +42,8 @@ mwi <- mwi_info %>% filter(snu_3 %in% mwi6name) %>%
 
 #check for 1:many matches
 mwi %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit) %>% group_by_all() %>%
-  filter(n()>1)
-
+  filter(n()>1) %>% print(n = 38)
+#not actual duplications
 ################################################################################
 # 
 # 
@@ -133,11 +128,11 @@ mwi %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, populati
 # 
 # ###############################################################################
 # 
-# 
-# mwi <- bind_rows(mwi6, mwi6m) %>% select(-contains("snu")) %>% 
-#   glimpse() 
+
+# mwi <- bind_rows(mwi6m) %>% select(-contains("snu")) %>%
+#   glimpse()
 # #check to see if number of rows matches source
 # nrow(mwi) - nrow(mwi_info)
-# 
-# 
-# #later bind country dfs together
+
+
+#later bind country dfs together

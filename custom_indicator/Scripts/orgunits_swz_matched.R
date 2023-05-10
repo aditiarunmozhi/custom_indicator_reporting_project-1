@@ -11,7 +11,9 @@
 
 # user purr to create DF for each country, named after each count --------
 swz_info <- complete_clean_data %>% filter(country=="Eswatini") %>%
-  clean_names() %>% glimpse()
+  clean_names() %>% 
+  mutate(snu_2 = recode(snu_2, "Siphocosini" = "Siphocosini Inhkuhndla")) %>%
+  glimpse()
 
 table(swz_info$snu_2) #snu2 level should match to level 5 in datim
 #table(swz6op$orgunit_parent)
@@ -24,13 +26,14 @@ swz5op <- df_orgs$swz_orgs %>%
          orgunit_name  = str_replace(orgunit_name, "\\s\\s", "\\s")) %>% print() %>%
   filter(orgunit_level  == "5") %>% select(orgunit_level:orgunit_name)
 swz5uid <- c(swz5op$orgunit_uid)
+swz5org <- c(swz5op$orgunit_name)
 swz5uid
 
 ################################################################################
+nrow(swz_info)
 
 
-
-# for most level 2 that match_level 5, use snu_2_id -----------------------
+# for most snu 2 that match_level 5, use snu_2_id -----------------------
 swz5<- swz_info %>% filter(snu_2_id %in% swz5uid, snu_2!="") %>% 
   select(-snu_4_id, -snu_3_id) %>% 
   rename(orgunit_uid  = snu_2_id) %>% inner_join(swz5op) %>%  
@@ -38,14 +41,14 @@ swz5<- swz_info %>% filter(snu_2_id %in% swz5uid, snu_2!="") %>%
 scales::percent(nrow(swz5)/nrow(swz_info))
 nrow(swz5)
 
-# for level 3 that doesn't match level 2, match by snu_2 id --------
+# for snu 2 that doesn't match level 5, match by snu_2 name --------
 swz5m1 <- swz_info %>% filter(!snu_2_id %in% swz5uid, snu_2 != "") %>% rename(orgunit_name = snu_2)
 scales::percent(nrow(swz5m1)/nrow(swz_info), accuracy = 3)
 nrow(swz5m1)
 
 #identify and resolve any failed matches
 swz5m1 %>% 
-  anti_join(swz5op) %>% print()
+  anti_join(swz5op) %>% select(orgunit_name) %>% print()
 #resolve discrepancies
 
 #now match
@@ -53,7 +56,7 @@ swz5m <- swz5m1 %>% inner_join(swz5op) %>% # or inner if there are non-matches
   select(-snu_3_id:-snu_4_id) %>%
   rename(orgunituid = orgunit_uid, orgunit = orgunit_name) %>%
   glimpse() #check if the tibble nrow matches the previous count. if it exceeds there is some double matching
-
+nrow(swz5m)
 
 #check for 1:many matches
 swz5m_dup <- swz5m %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit) %>% group_by_all() %>%
