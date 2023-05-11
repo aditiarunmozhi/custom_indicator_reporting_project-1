@@ -65,23 +65,26 @@ nrow(tza_info) - nrow(tza7) - nrow(tza7m)
 ##############################################################################
 
 # check for nonmatched, use going forward
-tza6_check <- tza_info %>% filter(!snu_4 %in% tza7org, !snu_4_id %in% tza7uid) %>% print()
+tza6_unmatched_at_7 <- tza_info %>% filter(!snu_4 %in% tza7org, !snu_4_id %in% tza7uid) %>% print()
 
 ##############################################################################
-nrow(tza6_check)
+nrow(tza6_unmatched_at_7)
 
 
 #excluding the above
 
 # at snu_level 3 match to metadata level, tz 6 ------------------------------
-tza6<- tza6_check %>% filter(snu_3_id %in% tza6uid) %>% 
+tza6 <- tza6_unmatched_at_7 %>% filter(snu_3_id %in% tza6uid, snu_2_id %in% tza5uid) %>% 
   rename(orgunit_uid = snu_3_id) %>% inner_join(tza6op) %>%  
   rename(orgunituid = orgunit_uid, orgunit = orgunit_name) %>%
   select(-snu_1_id:-snu_2_id, -snu_4, -snu_4_id) %>% print()
-nrow(tza6)
+
+#1 check for dup
+tza6 %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit, orgunit_parent) %>% group_by_all() %>% 
+  filter(n()>1)
 
 # for level 3 that doesn't match level 6, match by snu_3 to snu_3_id from metadata ----------
-tza6m1 <- tza6_check %>% filter(!snu_3_id %in% tza6uid) %>% print()
+tza6m1 <- tza6_unmatched_at_7 %>% filter(!snu_3_id %in% tza6uid & !snu_2_id %in% tza5uid) %>% print()
 nrow(tza6m1) 
 
 
@@ -109,18 +112,22 @@ tza6m <- tza6m1 %>%   rename(orgunit_name = snu_3, orgunit_parent = snu_2) %>%
 nrow(tza6m) 
 
 #1 row double matched initially but no longer --> resolved above
-test <- tza6m %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit, orgunit_parent) %>% group_by_all() %>% 
+tza6 %>% select(value, indicator, age, sex, otherdisaggregate, numdenom, population, orgunit, orgunit_parent) %>% group_by_all() %>% 
   filter(n()>1)
-test
+
 
 #records unmatched from snu3 to level 6, try against level 5
-tza5 <- tza6m_pre %>% anti_join(tza6op, by = c("orgunit_name", "orgunit_parent"), na_matches = "never") %>% 
-  select(-orgunit_name) %>% 
-  rename(orgunit_name = orgunit_parent) %>% 
-  inner_join(tza5op, by = c("orgunit_name"), na_matches = "never")
+tza5 <- tza6m1 %>% 
+  rename(orgunit_name = snu_3, orgunit_parent = snu_2) %>% 
+  anti_join(tza6op, by = c("orgunit_name", "orgunit_parent"), na_matches = "never") %>% 
+  rename(snu_3 = orgunit_name, orgunit_name = orgunit_parent) %>% 
+  inner_join(tza5op, by = c("orgunit_name"), na_matches = "never") %>% 
+  rename(orgunit = orgunit_name, orgunituid = orgunit_uid) 
+  
 nrow(tza5)
 
-unmatched_snu2 <- tza6m_pre %>% anti_join(tza6op, by = c("orgunit_name", "orgunit_parent"), na_matches = "never") %>% 
+unmatched_at_5m67 <- tza6m1 %>% rename(orgunit_name = snu_3, orgunit_parent = snu_2) %>% 
+  anti_join(tza6op, by = c("orgunit_name", "orgunit_parent"), na_matches = "never") %>% 
   select(-orgunit_name) %>% 
   rename(orgunit_name = orgunit_parent) %>%
   anti_join(tza5op, by = c("orgunit_name"), na_matches = "never") %>% print()
@@ -129,11 +136,11 @@ unmatched_snu2 %>% count(orgunit_name)
 # tza6op %>% filter(str_detect(orgunit_parent, "Arusha DC"))
 
 tza <- bind_rows(tza7, tza7m, tza6, tza6m, tza5) %>% 
-select(-contains("snu")) %>% rename(orgunit)
+select(-contains("snu")) %>% 
   glimpse() 
 #check to see if number of rows matches source
 nrow(tza) - nrow(tza_info)
-glimpse(tza6m)
+
 
 #later bind country dfs together
-
+tza %>% count(orgunit_level)
