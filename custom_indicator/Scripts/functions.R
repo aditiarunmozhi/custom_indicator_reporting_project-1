@@ -8,6 +8,13 @@ orgunit_level_sep <- function(df, lev, new_col_1, new_col_uid_1, new_col_2, new_
             {{new_col_2}} := orgunit_name, {{new_col_uid_2}} := orgunit_uid) %>%
      select(-orgunit_level))}
 
+# potential for iteration with this function
+# orgunit_level_sep <- function(df, lev) {
+#   (df %>% filter(orgunit_level == lev) %>% 
+#      rename(!!paste("orgunit", as.character(lev), sep = "_") := orgunit_name, !!paste("orgunit", as.character(lev), "uid", sep = "_") := orgunit_uid,
+#             !!paste("orgunit", as.character(lev-1), sep = "_") := orgunit_parent, !!paste("orgunit", as.character(lev-1), "uid", sep = "_") := orgunit_parent_uid) %>%
+#      select(-orgunit_level))}
+
 orgunit_table_join <- function(level_x, level_y, orgunit_x_uid, orgunit_x) {
   full_join(level_x, level_y, by = join_by({{orgunit_x_uid}}, {{orgunit_x}}), multiple = "all") %>%
     select(sort(colnames(.)))}

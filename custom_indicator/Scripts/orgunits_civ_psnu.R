@@ -26,3 +26,20 @@ civ_6_merge <- left_join(civ_6_clean, civ_orgunit_table, by = join_by(orgunit_5_
   rename(psnu = orgunit_4, psnu_uid = orgunit_4_uid)
 
 civ_merge_psnu <- bind_rows(civ_7_merge, civ_6_merge)
+
+
+# future purr usage maybe?
+# psnu_level <- orgunit_levels %>% filter(country_iso == "CIV") 
+# lev <- (psnu_level$prioritization[1]:max(civ$orgunit_level))
+# 
+# civ_orgs <- map(lev, orgunit_level_sep(civ_orgs_clean))
+# 
+# civ_orgs_clean <- orgunit_clean(df_orgs$civ_orgs)
+# 
+# civ_level_4 <- orgunit_level_sep(civ_orgs_clean , 4)
+# 
+# civ_level_5 <- orgunit_level_sep(civ_orgs_clean , 5)
+# 
+# civ_level_6 <- orgunit_level_sep(civ_orgs_clean , 6)
+# 
+# civ_level_7 <- orgunit_level_sep(civ_orgs_clean , 7)
