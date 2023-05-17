@@ -25,7 +25,7 @@ df_orgs$vnm_orgs %>% filter(orgunit_name %in% snu2) #snu2 should match datim lev
 vnm6 <- vnm_info %>% filter(snu_3_id %in% vnm6uid, snu_3!="") %>% select(-c(snu_1_id, snu_2_id)) %>% 
   rename(orgunit_uid = snu_3_id)  %>% inner_join(vnm6op) %>%  
   rename(orgunituid = orgunit_uid, orgunit = orgunit_name) 
-scales::percent(nrow(vnm7)/nrow(vnm_info))
+scales::percent(nrow(vnm6)/nrow(vnm_info))
 
 # for level 3 vnmt doesn't match level 6, match by snu_2 name --------
 vnm6m1 <- vnm_info %>% filter(!snu_3_id %in% vnm6uid, snu_3 == "")

@@ -7,4 +7,4 @@ bdi_merge_psnu <- bdi %>% rename(psnu = orgunit_parent, psnu_uid = orgunit_paren
 
 #data validation
 
-bdi_data_check <- data_check(bdi_merge_psnu)
+#bdi_data_check <- data_check(bdi_merge_psnu)
