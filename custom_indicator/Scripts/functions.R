@@ -11,11 +11,6 @@ orgunit_level_sep <- function(df, lev) {
             !!paste("orgunit", as.character(lev-1), "uid", sep = "_") := orgunit_parent_uid) %>%
      select(-orgunit_level))}
 
-# old replaced function
-# orgunit_table_join <- function(level_x, level_y, orgunit_x_uid, orgunit_x) {
-#   full_join(level_x, level_y, by = join_by({{orgunit_x_uid}}, {{orgunit_x}}), multiple = "all") %>%
-#     select(sort(colnames(.)))}
-
 #org unit list function
 org_url <- "https://www.datim.org/api/sqlViews/DataExchOUs/data?format=json"
 load_secrets()

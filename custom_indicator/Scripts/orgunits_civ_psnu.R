@@ -7,7 +7,6 @@ civ_orgs_clean <- orgunit_clean(df_orgs$civ_orgs)
 civ_org_levels <- map(.x = lev, .f = ~orgunit_level_sep(civ_orgs_clean, .x))
 
 civ_orgunit_table <- reduce(civ_org_levels, full_join)
-# civ_orgunit_table <- reduce(map(.x = lev, .f = ~orgunit_level_sep(orgunit_clean(df_orgs$civ_orgs), .x)), inner_join)
 
 #merge with data
 civ_7_clean <- civ %>% filter(orgunit_level == 7) %>% rename(orgunit_6 = orgunit_parent, orgunit_6_uid = orgunit_parent_uid)
@@ -22,3 +21,5 @@ civ_6_merge <- left_join(civ_6_clean, civ_orgunit_table, by = join_by(orgunit_5_
 
 civ_merge_psnu <- bind_rows(civ_7_merge, civ_6_merge)
 
+# future: replacing lines 6-9
+# civ_orgunit_table <- reduce(map(.x = lev, .f = ~orgunit_level_sep(orgunit_clean(df_orgs$civ_orgs), .x)), full_join)
